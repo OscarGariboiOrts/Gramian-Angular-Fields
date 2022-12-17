@@ -30,8 +30,6 @@ with open(ref2, 'r') as f:
 
 gasf = GramianAngularField(image_size=48, method='summation')
 X_gasf = gasf.fit_transform(task)
-#gadf = GramianAngularField(image_size=48, method='difference')
-#X_gadf = gadf.fit_transform(task)
 
 len_task = len(task)
 
@@ -48,7 +46,7 @@ for i in range(len_task):
 dataset_home = 'images_gasf/'
 labeldirs = ['class1/', 'class2/', 'class3/', 'class4/', 'class5/']
 for labldir in labeldirs:
-    if not os.path.isdir(labldir):
+    if not os.path.isdir(dataset_home + labldir):
         newdir = dataset_home + labldir
         os.makedirs(newdir, exist_ok=True)
 
