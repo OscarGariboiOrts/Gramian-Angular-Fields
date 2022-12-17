@@ -15,7 +15,7 @@ with open(task1, "r") as f:
 max_length = 50
 task = seqq.pad_sequences(task, maxlen=max_length, dtype="float32")
 
-gadf = GramianAngularField(image_size=48, method='diference')
+gadf = GramianAngularField(image_size=48, method='difference')
 X_gadf = gadf.fit_transform(task)
 
 len_task = len(task)
