@@ -24,10 +24,6 @@ with open(task1, "r") as f:
 max_length = 50
 task = seqq.pad_sequences(task, maxlen=max_length, dtype="float32")
 
-with open(ref1, 'r') as f:
-    ref = [float(x.split(';')[1].strip()) for x in f.readlines()[:]]
-    ref_cat = to_categorical(ref)
-
 gasf = GramianAngularField(image_size=48, method='summation')
 X_gasf = gasf.fit_transform(task)
 
