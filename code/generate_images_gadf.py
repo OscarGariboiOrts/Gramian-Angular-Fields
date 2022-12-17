@@ -17,6 +17,7 @@ from shutil import copyfile, move
 task2 = 'task2.txt' 
 ref2 = 'ref2.txt' 
 
+# path to the files containing the anomalous diffusing trajectories, created using the andi-datasets python package
 with open(task2, "r") as f:
     task = [np.array(x.split(";"), dtype="float32") for x in f.readlines()]
     task = np.array([x[1:] for x in task]) 
