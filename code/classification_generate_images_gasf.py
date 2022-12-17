@@ -33,27 +33,27 @@ X_gasf = gasf.fit_transform(task)
 
 len_task = len(task)
 
-if not os.path.isdir('images_gasf'):
-    os.makedirs('images_gasf', exist_ok=True)
+if not os.path.isdir('classification_images_gasf'):
+    os.makedirs('classification_images_gasf', exist_ok=True)
 
 for i in range(len_task):
     print(f'\r{i}/{len_task} - {round(i/len_task*100, 2)}%', end='')
     plt.imshow(X_gasf[i], extent=[0, 1, 0, 1], cmap = 'coolwarm', aspect = 'auto',vmax=abs(X_gasf[i]).max(), vmin=-abs(X_gasf[i]).max())
-    plt.savefig('images_gasf/X_gasf_{}.jpg'.format(i), bbox_inches='tight')
+    plt.savefig('classification_images_gasf/X_gasf_{}.jpg'.format(i), bbox_inches='tight')
     plt.close("all")
 
 
-dataset_home = 'images_gasf/'
+dataset_home = 'classification_images_gasf/'
 labeldirs = ['class1/', 'class2/', 'class3/', 'class4/', 'class5/']
 for labldir in labeldirs:
     if not os.path.isdir(dataset_home + labldir):
         newdir = dataset_home + labldir
         os.makedirs(newdir, exist_ok=True)
 
-src_directory = 'images_gasf/'
+src_directory = 'classification_images_gasf/'
 for file in [x for x in os.listdir(src_directory) if not x.startswith("class")]:
     src = src_directory + '/' + file
-    dst_dir = 'images_gasf/'
+    dst_dir = 'classification_images_gasf/'
     file_number_id = int(file.split(".")[0].split("_")[-1])
     file_number = int(ref[file_number_id])
     if file_number == 0:
