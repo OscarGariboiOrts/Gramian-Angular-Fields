@@ -41,9 +41,10 @@ def model_keras(name):
 
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-
+# main path to the directory where the images are saved
 source_dir = 'classification_images_gadf/'
 
+# prepare a dataframe with the path to each image
 images = [x for x in os.listdir(source_dir) if x.endswith('jpg')]
 
 indexes = [x.split('.')[0].split('_')[-1] for x in images]
@@ -61,6 +62,7 @@ df = pd.DataFrame()
 df['id'] = images
 df['label'] = labels
 
+# initialize a data generator to feed the model
 train_datagen = ImageDataGenerator(rescale=1./255, width_shift_range=0.2, height_shift_range=0.2, validation_split=0.2)
 
 target_size = (95, 63)
@@ -85,9 +87,11 @@ path_to_model = 'models/'
 if not os.path.isdir(path_to_model):
     os.makedirs(path_to_model, exist_ok=True)
 
+# define callbacks
 es = EarlyStopping(monitor='val_mean_absolute_error', mode='min', verbose=1, patience=20)
 mc = ModelCheckpoint(path_to_model + 'regression_gadf_mobilenet-{epoch:04d}-{val_mean_absolute_error:.4f}.h5', monitor='val_mean_absolute_error', mode='min', verbose=0, save_best_only=True)
 
+# train the model
 history = model.fit_generator(generator=train_generator, steps_per_epoch=steps_per_epoch_train, validation_data=valid_generator, validation_steps=steps_per_epoch_valid, epochs=200, verbose=1, callbacks=[es, mc])
 
 print("Program finished!")
