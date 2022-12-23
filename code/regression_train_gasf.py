@@ -41,9 +41,10 @@ def model_keras(name):
 
     model.compile(optimizer='adam', loss='mean_absolute_error', metrics=['mean_absolute_error'])
 
-
+# main path to the directory where the images are saved
 source_dir = 'regression_images_gasf/'
 
+# prepare a dataframe with the path to each image
 images = [x for x in os.listdir(source_dir) if x.endswith('jpg')]
 
 indexes = [x.split('.')[0].split('_')[-1] for x in images]
@@ -61,6 +62,7 @@ df = pd.DataFrame()
 df['id'] = images
 df['exponent'] = exponents
 
+# initialize a data generator to feed the model
 train_datagen = ImageDataGenerator(rescale=1./255, width_shift_range=0.2, height_shift_range=0.2,)
 
 test_datagen = ImageDataGenerator(rescale=1./255)
@@ -69,6 +71,7 @@ target_size = (95, 63)
 img_width = target_size[0]
 img_height = target_size[1]
 
+# batch_size parameter has to be adjusted to have number_of_samples % batch_size == 0
 train_generator = train_datagen.flow_from_dataframe(dataframe=df, directory=source_dir, x_col="id", y_col="exponent", subset='training', batch_size=32, shuffle=True, class_mode="other", target_size=(img_width, img_height))
 
 valid_generator = train_datagen.flow_from_dataframe(dataframe=df, directory=source_dir, x_col="id", y_col="exponent", subset="validation", batch_size=32, shuffle=True, class_mode="other", target_size=(img_width, img_height))
@@ -85,10 +88,11 @@ path_to_model = 'models/'
 if not os.path.isdir(path_to_model):
     os.makedirs(path_to_model, exist_ok=True)
 
-
+# define callbacks
 es = EarlyStopping(monitor='val_mean_absolute_error', mode='min', verbose=1, patience=20)
 mc = ModelCheckpoint(path_to_model + 'regression_gasf_mobilenet-{epoch:04d}-{val_mean_absolute_error:.4f}.h5', monitor='val_mean_absolute_error', mode='min', verbose=0, save_best_only=True)
 
+# train the model
 history = model.fit_generator(generator=train_generator, steps_per_epoch=steps_per_epoch_train, validation_data=valid_generator, validation_steps=steps_per_epoch_valid, epochs=200, verbose=1, callbacks=[es, mc])
 
 print("Program finished!")
